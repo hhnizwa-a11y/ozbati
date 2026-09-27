@@ -1,0 +1,7 @@
+node_modules
+dist
+dist-single
+tests/private
+android/app/build
+android/.gradle
+*.keystore

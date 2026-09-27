@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* الألوان كمتغيرات: الوضع النهاري أولًا، ثم الليلي */
+:root {
+  --ground: 245 247 250;   /* #F5F7FA */
+  --surface: 255 255 255;
+  --sunk: 238 242 247;
+  --ink: 16 36 58;         /* #10243A */
+  --muted: 95 113 135;
+  --line: 223 229 237;
+  --chart-grid: #E6EBF1;
+  --chart-axis: #7A8BA0;
+  color-scheme: light;
+}
+:root.dark {
+  --ground: 8 19 32;
+  --surface: 15 31 49;
+  --sunk: 21 40 62;
+  --ink: 231 237 245;
+  --muted: 148 166 188;
+  --line: 34 55 80;
+  --chart-grid: #1E3550;
+  --chart-axis: #8397B0;
+  color-scheme: dark;
+}
+
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: rgb(var(--ground));
+  color: rgb(var(--ink));
+  font-family: 'Readex Pro', Tahoma, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+#root { min-height: 100%; }
+
+.num { font-variant-numeric: tabular-nums; font-feature-settings: 'tnum'; }
+h1, h2, h3 { text-wrap: balance; }
+
+@layer components {
+  .card { @apply bg-surface rounded-2xl border border-line/70 shadow-card; }
+  .btn { @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 h-10 text-sm font-medium transition active:scale-[.98] disabled:opacity-50 disabled:pointer-events-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald/60 whitespace-nowrap; }
+  .btn-primary { @apply btn bg-navy text-white hover:bg-navy-700 dark:bg-emerald dark:text-navy-950 dark:hover:brightness-110; }
+  .btn-emerald { @apply btn bg-emerald text-white hover:brightness-105; }
+  .btn-ghost { @apply btn bg-transparent text-ink hover:bg-sunk; }
+  .btn-soft { @apply btn bg-sunk text-ink hover:bg-line/60; }
+  .btn-danger { @apply btn bg-red-600 text-white hover:bg-red-700; }
+  .btn-sm { @apply h-8 px-3 text-xs rounded-lg; }
+  .icon-btn { @apply inline-flex items-center justify-center w-9 h-9 rounded-xl text-muted hover:bg-sunk hover:text-ink transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald/60; }
+  .input { @apply w-full h-11 rounded-xl border border-line bg-surface px-3 text-sm text-ink placeholder:text-muted/70 focus:outline-none focus:ring-2 focus:ring-emerald/40 focus:border-emerald transition; }
+  .label { @apply block text-xs font-medium text-muted mb-1.5; }
+  .chip { @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium; }
+  .eyebrow { @apply text-[11px] font-medium uppercase tracking-[.08em] text-muted; }
+  .section-title { @apply text-base font-semibold text-ink; }
+}
+
+select.input { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237A8BA0' stroke-width='2.5'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: left .8rem center; padding-left: 2rem; }
+
+/* شريط التمرير */
+.scroll-thin::-webkit-scrollbar { width: 8px; height: 8px; }
+.scroll-thin::-webkit-scrollbar-thumb { background: rgb(var(--line)); border-radius: 8px; }
+
+/* Recharts */
+.recharts-cartesian-grid line { stroke: var(--chart-grid); }
+.recharts-cartesian-axis-tick text { fill: var(--chart-axis); font-family: 'Readex Pro', Tahoma, sans-serif; font-size: 11px; }
+.recharts-surface:focus, .recharts-wrapper:focus, .recharts-sector:focus, .recharts-rectangle:focus { outline: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+}
+
+/* تقرير A4 */
+.a4 { width: 794px; min-height: 1123px; background: #fff; color: #10243A; padding: 44px 48px; box-sizing: border-box; font-family: 'Readex Pro', Tahoma, sans-serif; direction: rtl; }

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">عزبتي</string>
+    <string name="title_activity_main">عزبتي</string>
+    <string name="package_name">om.ozbati.app</string>
+    <string name="custom_url_scheme">om.ozbati.app</string>
+</resources>
