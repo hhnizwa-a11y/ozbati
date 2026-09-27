@@ -1,5 +1,12 @@
 apply plugin: 'com.android.application'
 
+// قيم الإصدار والتوقيع من متغيرات بيئة GitHub Actions (مع قيم افتراضية للبناء المحلي)
+def ozVersionCode = (System.getenv("VERSION_CODE") ?: "1") as Integer
+def ozVersionName = System.getenv("VERSION_NAME") ?: "1.0"
+def ozKeystorePath = System.getenv("OZBATI_KEYSTORE_PATH")
+def ozKeystorePassword = System.getenv("OZBATI_KEYSTORE_PASSWORD") ?: ""
+def ozKeyAlias = System.getenv("OZBATI_KEY_ALIAS") ?: "ozbati"
+
 android {
     namespace = "om.ozbati.app"
     compileSdk = rootProject.ext.compileSdkVersion
@@ -8,8 +15,8 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         // رقم الإصدار يُمرَّر من GitHub Actions ليقبل أندرويد التحديث فوق النسخة السابقة
-        versionCode (System.getenv("VERSION_CODE") ?: "1").toInteger()
-        versionName System.getenv("VERSION_NAME") ?: "1.0"
+        versionCode = ozVersionCode
+        versionName = ozVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
@@ -20,18 +27,19 @@ android {
     // مفتاح التوقيع يُقرأ من أسرار GitHub (لا يُحفظ في المستودع)
     signingConfigs {
         release {
-            def ks = System.getenv("OZBATI_KEYSTORE_PATH")
-            if (ks) {
-                storeFile file(ks)
-                storePassword System.getenv("OZBATI_KEYSTORE_PASSWORD")
-                keyAlias System.getenv("OZBATI_KEY_ALIAS") ?: "ozbati"
-                keyPassword System.getenv("OZBATI_KEY_PASSWORD") ?: System.getenv("OZBATI_KEYSTORE_PASSWORD")
+            if (ozKeystorePath) {
+                storeFile = file(ozKeystorePath)
+                storePassword = ozKeystorePassword
+                keyAlias = ozKeyAlias
+                keyPassword = ozKeystorePassword
             }
         }
     }
     buildTypes {
         release {
-            if (System.getenv("OZBATI_KEYSTORE_PATH")) signingConfig signingConfigs.release
+            if (ozKeystorePath) {
+                signingConfig = signingConfigs.release
+            }
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
