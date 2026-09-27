@@ -28,6 +28,8 @@ jobs:
   web:
     needs: test
     runs-on: ubuntu-latest
+    # يتطلب تفعيل GitHub Pages مرة واحدة: Settings ← Pages ← Source: GitHub Actions
+    continue-on-error: true
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
@@ -38,7 +40,6 @@ jobs:
       - run: npm ci
       - run: npx vite build
       - uses: actions/configure-pages@v5
-        with: { enablement: true }
       - uses: actions/upload-pages-artifact@v3
         with: { path: dist }
       - id: deploy
@@ -53,7 +54,6 @@ jobs:
         with: { node-version: 22, cache: npm }
       - uses: actions/setup-java@v4
         with: { distribution: temurin, java-version: 21, cache: gradle }
-      - uses: android-actions/setup-android@v3
       - run: npm ci
       - run: npx vite build
       - run: npx cap sync android
