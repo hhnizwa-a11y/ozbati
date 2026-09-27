@@ -84,7 +84,7 @@ jobs:
           tail -n 80 gradle.log
           if [ $CODE -ne 0 ]; then
             # إظهار سبب الفشل في ملخص التشغيل
-            grep -E "What went wrong|error:|Error|FAILURE|Could not|> " gradle.log | head -n 25 | while IFS= read -r line; do echo "::error::$line"; done
+            { grep -A8 "What went wrong" gradle.log; grep -m12 "Caused by" gradle.log; grep -m8 -E "^e: |error:" gradle.log; } | head -n 40 | while IFS= read -r line; do echo "::error::$line"; done
             exit $CODE
           fi
           cp app/build/outputs/apk/$OUT ../ozbati.apk
